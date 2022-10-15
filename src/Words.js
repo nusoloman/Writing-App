@@ -17,7 +17,7 @@ export default class Words extends Component {
     document.getElementById("input").placeholder = "";
   }
   onBlur = () => {
-    document.getElementById("input").placeholder = "Başalamak için butona tıklayınız";
+    document.getElementById("input").placeholder = "Başlamak için butona tıklayınız";
   }
   getWords = () => {
     const allWords = document.querySelectorAll('.word');
@@ -71,7 +71,7 @@ export default class Words extends Component {
 
         </Card>
 
-        <Input id="input" type='text' onFocus={this.onFocus} onBlur={this.onBlur} value={this.state.inputValue} onChange={(e)=> this.checkWord(e)} ></Input>
+        <Input placeholder='Başlamak için butona tıklayınız' id="input" type='text' onFocus={this.onFocus} onBlur={this.onBlur} value={this.state.inputValue} onChange={(e)=> this.checkWord(e)} ></Input>
 
         <Button onClick={this.getWords}> Get</Button>
 
