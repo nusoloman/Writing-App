@@ -39,7 +39,7 @@ export default class Words extends Component {
       }
       break;
       case 2: {
-        let words = randomWords();
+        let words = randomWords(20);
         this.setState({ words });
         this.setState({index:0});
       }
@@ -88,7 +88,7 @@ export default class Words extends Component {
         
         <div style={{ direction: "ltr" }}>
           {this.state.words.map((word, index) => (
-            <span>
+            <span key={index}>
               <h3
                 id={index}
                 className="word"
