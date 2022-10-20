@@ -3,6 +3,8 @@ import randomWords from 'random-words'
 
 
 import {Button, Card, Input, Table, } from "reactstrap";
+import words from 'random-words';
+import Timer from './Timer';
 
 
 export default class Words extends Component {
@@ -11,6 +13,7 @@ export default class Words extends Component {
     index : 0,
     inputValue : "",
     backgroundColor:"",
+    level:1,
   };
 
   onFocus = () => {
@@ -20,14 +23,34 @@ export default class Words extends Component {
     document.getElementById("input").placeholder = "Başlamak için butona tıklayınız";
   }
   getWords = () => {
+    this.setState({level:this.state.level+1});
     const allWords = document.querySelectorAll('.word');
     allWords.forEach(word => {
       word.style.backgroundColor = 'white';
     });
     
-    const words = randomWords(10);
-    this.setState({ words });
-    this.setState({index:0});
+    // const words = randomWords(10);
+    switch (this.state.level){
+      case 1 : {
+        let words = randomWords(10);
+        this.setState({ words });
+        this.setState({index:0});
+      }
+      break;
+      case 2: {
+        let words = randomWords();
+        this.setState({ words });
+        this.setState({index:0});
+      }
+      break;
+      default : {
+        const words = randomWords(10);
+        this.setState({ words });
+        this.setState({index:0});
+      }
+    }
+    // this.setState({ words });
+    // this.setState({index:0});
 
    
   };
@@ -62,18 +85,21 @@ export default class Words extends Component {
     return (
 
       <div style={{textAlign:"center"}}>
+
+      <Timer></Timer>
+        
         <Card>
           {this.state.words.map((word, index) => (
             <div>
               <h3 id={index} className='word' style={{display: "inline-block" , backgroundColor: this.state.backgroundColor}}>{word}</h3>
             </div>
           ))}
-
         </Card>
 
         <Input placeholder='Başlamak için butona tıklayınız' id="input" type='text' onFocus={this.onFocus} onBlur={this.onBlur} value={this.state.inputValue} onChange={(e)=> this.checkWord(e)} ></Input>
 
         <Button onClick={this.getWords}> Get</Button>
+
 
         
       </div>
