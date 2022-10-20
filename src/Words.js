@@ -59,22 +59,23 @@ export default class Words extends Component {
   render() {
     return (
       <div style={{ textAlign: "center" }}>
-        <Card>
+        <div style={{ direction: "ltr" }}>
           {this.state.words.map((word, index) => (
-            <div>
+            <span>
               <h3
                 id={index}
                 className="word"
                 style={{
                   display: "inline-block",
                   backgroundColor: this.state.backgroundColor,
+                  margin: "5px",
                 }}
               >
                 {word}
               </h3>
-            </div>
+            </span>
           ))}
-        </Card>
+        </div>
 
         <Input
           placeholder={this.state.myPlaceHolder}
