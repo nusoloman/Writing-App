@@ -1,27 +1,28 @@
-import React, { Component } from 'react'
-import randomWords from 'random-words'
+import React, { Component } from "react";
+import randomWords from "random-words";
 
-
-import {Button, Card, Input, Table, } from "reactstrap";
-import words from 'random-words';
+import { Button, Card, Input, Table } from "reactstrap";
 import Timer from './Timer';
-
 
 export default class Words extends Component {
   state = {
     words: [],
-    index : 0,
-    inputValue : "",
-    backgroundColor:"",
+    index: 0,
+    inputValue: "",
+    backgroundColor: "",
+    myPlaceHolder: "Başlamak için butona tıklayınız",
     level:1,
   };
 
   onFocus = () => {
     document.getElementById("input").placeholder = "";
   }
-  onBlur = () => {
-    document.getElementById("input").placeholder = "Başlamak için butona tıklayınız";
+
+  blurHandler() {
+    document.getElementById("input").placeholder =
+      "Başlamak için butona tıklayınız";
   }
+
   getWords = () => {
     this.setState({level:this.state.level+1});
     const allWords = document.querySelectorAll('.word');
@@ -59,50 +60,65 @@ export default class Words extends Component {
     document.getElementById(this.state.index).style.backgroundColor = "yellow";
     const { words } = this.state;
     let { value } = e.target;
-    this.setState({inputValue : value})
+    this.setState({ inputValue: value });
     value = value.toLowerCase().split(" ");
-    console.log(value)
+    console.log(value);
 
     if (value.length === 2) {
-    if (words[this.state.index] === value[0]) {
-    console.log("true")
-    this.setState({index: this.state.index+1});
-    document.getElementById(this.state.index).style.backgroundColor = "green";
-    this.setState({inputValue: ""});
-    
-  }
-  else{
-    console.log("false")
-    this.setState({index: this.state.index+1});
-    document.getElementById(this.state.index).style.backgroundColor = "red";
-    this.setState({inputValue: ""});
-  }
-  }
-  }
-  
-  render() {
-    
-    return (
+      if (words[this.state.index] === value[0]) {
+        console.log("true");
+        this.setState({ index: this.state.index + 1 });
+        document.getElementById(this.state.index).style.backgroundColor =
+          "green";
+        this.setState({ inputValue: "" });
+      } else {
+        console.log("false");
+        this.setState({ index: this.state.index + 1 });
+        document.getElementById(this.state.index).style.backgroundColor = "red";
+        this.setState({ inputValue: "" });
+      }
+    }
+  };
 
-      <div style={{textAlign:"center"}}>
+  render() {
+    return (
+      <div style={{ textAlign: "center" }}>
 
       <Timer></Timer>
         
-        <Card>
+        <div style={{ direction: "ltr" }}>
           {this.state.words.map((word, index) => (
-            <div>
-              <h3 id={index} className='word' style={{display: "inline-block" , backgroundColor: this.state.backgroundColor}}>{word}</h3>
-            </div>
+            <span>
+              <h3
+                id={index}
+                className="word"
+                style={{
+                  display: "inline-block",
+                  backgroundColor: this.state.backgroundColor,
+                  margin: "5px",
+                }}
+              >
+                {word}
+              </h3>
+            </span>
           ))}
-        </Card>
+        </div>
 
-        <Input placeholder='Başlamak için butona tıklayınız' id="input" type='text' onFocus={this.onFocus} onBlur={this.onBlur} value={this.state.inputValue} onChange={(e)=> this.checkWord(e)} ></Input>
+        <Input
+          placeholder={this.state.myPlaceHolder}
+          id="input"
+          type="text"
+          onFocus={this.onFocus}
+          onBlur={this.blurHandler}
+          value={this.state.inputValue}
+          onChange={(e) => this.checkWord(e)}
+        ></Input>
 
         <Button onClick={this.getWords}> Get</Button>
 
 
         
       </div>
-
- ) } 
+    );
+  }
 }
