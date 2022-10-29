@@ -1,12 +1,14 @@
-import React, { Component } from 'react'
+import React from 'react'
 import ProgressBar from "react-bootstrap/ProgressBar";
 import { useState, useEffect } from "react";
-import { LEVEL_1_TIME } from './Constants';
+import { TIME_FOR_LEVELS } from './Constants';
 
-const Timer = ({ seconds }) => {
+const Timer = (props) => {
   // initialize timeLeft with the seconds prop
-  const [timeLeft, setTimeLeft] = useState(LEVEL_1_TIME);
-
+  const [timeLeft, setTimeLeft] = useState(0);
+  if (timeLeft === 0) {
+  setTimeLeft(props.seconds);
+  }
   useEffect(() => {
     // exit early when we reach 0
     if (!timeLeft) return;
@@ -21,12 +23,14 @@ const Timer = ({ seconds }) => {
     return () => clearInterval(intervalId);
     // add timeLeft as a dependency to re-rerun the effect
     // when we update it
-  }, [timeLeft]);
+  },[timeLeft]);
+
 
   return (
     <div>
-      <ProgressBar now={(LEVEL_1_TIME-timeLeft)/LEVEL_1_TIME*100}></ProgressBar>
+      <ProgressBar now={(TIME_FOR_LEVELS[props.level-2]-timeLeft)/TIME_FOR_LEVELS[props.level-2]*100}></ProgressBar>
       <h1 style={{ textAlign:"center"}}>{timeLeft}</h1>
+      {/* <h1 style={{ textAlign:"center"}}>{TIME_FOR_LEVELS[props.level-1]}</h1> */}
     </div>
   );
 };

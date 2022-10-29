@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import randomWords from "random-words";
-
+import Popup from "./Popup";
+import "./index.css";
 import { Button, Card, Input, Table } from "reactstrap";
 import Timer from './Timer';
+import { LEVEL_1_TIME, LEVEL_2_TIME, LEVEL_3_TIME, LEVEL_4_TIME, LEVEL_5_TIME } from "./Constants";
 
 export default class Words extends Component {
   state = {
@@ -12,6 +14,9 @@ export default class Words extends Component {
     backgroundColor: "",
     myPlaceHolder: "Başlamak için butona tıklayınız",
     level:1,
+    timer:false,
+    seconds:0,
+    openPopup:false,
   };
 
   onFocus = () => {
@@ -23,7 +28,13 @@ export default class Words extends Component {
       "Başlamak için butona tıklayınız";
   }
 
+  handleTimer = (value) => {
+    this.setState({timer:value});
+  }
+
+
   getWords = () => {
+    this.handleTimer(true);
     this.setState({level:this.state.level+1});
     const allWords = document.querySelectorAll('.word');
     allWords.forEach(word => {
@@ -33,13 +44,37 @@ export default class Words extends Component {
     // const words = randomWords(10);
     switch (this.state.level){
       case 1 : {
+        this.setState({seconds:LEVEL_1_TIME});
         let words = randomWords(10);
         this.setState({ words });
         this.setState({index:0});
       }
       break;
       case 2: {
+        this.setState({seconds:LEVEL_2_TIME});
+        this.setState({openPopup:true});
         let words = randomWords(20);
+        this.setState({ words });
+        this.setState({index:0});
+      }
+      break;
+      case 3: {
+        this.setState({seconds:LEVEL_3_TIME});
+        let words = randomWords(25);
+        this.setState({ words });
+        this.setState({index:0});
+      }
+      break;
+      case 4: {
+        this.setState({seconds:LEVEL_4_TIME});
+        let words = randomWords(30);
+        this.setState({ words });
+        this.setState({index:0});
+      }
+      break;
+      case 5: {
+        this.setState({seconds:LEVEL_5_TIME});
+        let words = randomWords(40);
         this.setState({ words });
         this.setState({index:0});
       }
@@ -82,9 +117,10 @@ export default class Words extends Component {
 
   render() {
     return (
-      <div style={{ textAlign: "center" }}>
+      <div className="main" style={{ textAlign: "center" }}>
 
-      <Timer></Timer>
+        {this.state.timer &&(
+      <Timer handleTimer={this.handleTimer} seconds={this.state.seconds} level={this.state.level}></Timer> )}
         
         <div style={{ direction: "ltr" }}>
           {this.state.words.map((word, index) => (
@@ -113,6 +149,9 @@ export default class Words extends Component {
           value={this.state.inputValue}
           onChange={(e) => this.checkWord(e)}
         ></Input>
+
+       <Popup trigger={this.state.openPopup}>
+          <h1>This popup has triggered.</h1></Popup>
 
         <Button onClick={this.getWords}> Get</Button>
 
