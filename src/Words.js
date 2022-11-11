@@ -2,9 +2,15 @@ import React, { Component } from "react";
 import randomWords from "random-words";
 import Popup from "./Popup";
 import "./index.css";
-import { Button, Card, Input, Table } from "reactstrap";
-import Timer from './Timer';
-import { LEVEL_1_TIME, LEVEL_2_TIME, LEVEL_3_TIME, LEVEL_4_TIME, LEVEL_5_TIME } from "./Constants";
+import { Button, Input } from "reactstrap";
+import Timer from "./Timer";
+import {
+  LEVEL_1_TIME,
+  LEVEL_2_TIME,
+  LEVEL_3_TIME,
+  LEVEL_4_TIME,
+  LEVEL_5_TIME,
+} from "./Constants";
 
 export default class Words extends Component {
   state = {
@@ -13,15 +19,20 @@ export default class Words extends Component {
     inputValue: "",
     backgroundColor: "",
     myPlaceHolder: "Başlamak için butona tıklayınız",
-    level:1,
-    timer:false,
-    seconds:0,
-    openPopup:false,
+    level: 1,
+    timer: false,
+    seconds: 0,
+    openPopup: false,
+    pause: false,
+  };
+
+  handleClosePopup = () => {
+    this.setState({ openPopup: false });
   };
 
   onFocus = () => {
     document.getElementById("input").placeholder = "";
-  }
+  };
 
   blurHandler() {
     document.getElementById("input").placeholder =
@@ -29,66 +40,72 @@ export default class Words extends Component {
   }
 
   handleTimer = (value) => {
-    this.setState({timer:value});
-  }
-
+    this.setState({ timer: value });
+  };
 
   getWords = () => {
     this.handleTimer(true);
-    this.setState({level:this.state.level+1});
-    const allWords = document.querySelectorAll('.word');
-    allWords.forEach(word => {
-      word.style.backgroundColor = 'white';
+    this.setState({ level: this.state.level + 1 });
+    const allWords = document.querySelectorAll(".word");
+    allWords.forEach((word) => {
+      word.style.backgroundColor = "white";
     });
-    
+
     // const words = randomWords(10);
-    switch (this.state.level){
-      case 1 : {
-        this.setState({seconds:LEVEL_1_TIME});
-        let words = randomWords(10);
-        this.setState({ words });
-        this.setState({index:0});
-      }
-      break;
-      case 2: {
-        this.setState({seconds:LEVEL_2_TIME});
-        this.setState({openPopup:true});
-        let words = randomWords(20);
-        this.setState({ words });
-        this.setState({index:0});
-      }
-      break;
-      case 3: {
-        this.setState({seconds:LEVEL_3_TIME});
-        let words = randomWords(25);
-        this.setState({ words });
-        this.setState({index:0});
-      }
-      break;
-      case 4: {
-        this.setState({seconds:LEVEL_4_TIME});
-        let words = randomWords(30);
-        this.setState({ words });
-        this.setState({index:0});
-      }
-      break;
-      case 5: {
-        this.setState({seconds:LEVEL_5_TIME});
-        let words = randomWords(40);
-        this.setState({ words });
-        this.setState({index:0});
-      }
-      break;
-      default : {
+    switch (this.state.level) {
+      case 1:
+        {
+          this.setState({ seconds: LEVEL_1_TIME });
+          let words = randomWords(10);
+          this.setState({ words });
+          this.setState({ index: 0 });
+        }
+        break;
+      case 2:
+        {
+          this.setState({ seconds: LEVEL_2_TIME });
+          this.setState({ openPopup: true });
+          let words = randomWords(20);
+          this.setState({ words });
+          this.setState({ pause: true });
+          this.setState({ index: 0 });
+        }
+        break;
+      case 3:
+        {
+          this.setState({ seconds: LEVEL_3_TIME });
+          this.setState({ openPopup: true });
+          let words = randomWords(25);
+          this.setState({ words });
+          this.setState({ index: 0 });
+        }
+        break;
+      case 4:
+        {
+          this.setState({ seconds: LEVEL_4_TIME });
+          this.setState({ openPopup: true });
+          let words = randomWords(30);
+          this.setState({ words });
+          this.setState({ index: 0 });
+        }
+        break;
+      case 5:
+        {
+          this.setState({ seconds: LEVEL_5_TIME });
+          this.setState({ openPopup: true });
+          let words = randomWords(40);
+          this.setState({ words });
+          this.setState({ index: 0 });
+        }
+        break;
+      default: {
         const words = randomWords(10);
         this.setState({ words });
-        this.setState({index:0});
+        this.setState({ index: 0 });
       }
     }
     // this.setState({ words });
     // this.setState({index:0});
-
-   
   };
 
   checkWord = (e) => {
@@ -118,10 +135,15 @@ export default class Words extends Component {
   render() {
     return (
       <div className="main" style={{ textAlign: "center" }}>
+        {this.state.timer && (
+          <Timer
+            handleTimer={this.handleTimer}
+            seconds={this.state.seconds}
+            level={this.state.level}
+            pause={this.state.pause}
+          ></Timer>
+        )}
 
-        {this.state.timer &&(
-      <Timer handleTimer={this.handleTimer} seconds={this.state.seconds} level={this.state.level}></Timer> )}
-        
         <div style={{ direction: "ltr" }}>
           {this.state.words.map((word, index) => (
             <span key={index}>
@@ -150,14 +172,48 @@ export default class Words extends Component {
           onChange={(e) => this.checkWord(e)}
         ></Input>
 
-       <Popup trigger={this.state.openPopup}>
-          <h1>This popup has triggered.</h1></Popup>
+        <Popup
+          handleClose={this.handleClosePopup}
+          trigger={this.state.openPopup}
+        >
+          <h1>This popup has triggered.</h1>
+        </Popup>
 
         <Button onClick={this.getWords}> Get</Button>
-
-
-        
       </div>
     );
   }
 }
+
+/* class Countdown {
+  constructor(count, handler) {
+    this.count = count;
+    this.interval = 0;
+    this.resetHandler = handler;
+  }
+
+  *makeCounter(count) {
+    var c = count;
+    while (true) {
+      yield c--;
+      if (c < 1) {
+        clearInterval(this.interval);
+        this.resetHandler();
+      }
+    }
+  }
+
+  start(handler) {
+    const counter = this.makeCounter(this.count);
+    this.interval = setInterval(() => {
+      const { value } = counter.next();
+      handler(value);
+    }, 1000);
+  }
+
+  resetTimer() {
+    clearInterval(this.interval);
+    this.resetHandler();
+  }
+}
+ */
