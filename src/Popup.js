@@ -24,7 +24,9 @@ function Popup({
          {children}
         </div>
     </div>
-  ):"";
+  ) : (
+    ""
+  );
 }
 
-export default Popup
+export default Popup;

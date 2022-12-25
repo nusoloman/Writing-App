@@ -31,7 +31,7 @@ function Words(){
     allWords.forEach(word => {
       word.style.backgroundColor = 'white';
     });
-    
+
     // const words = randomWords(10);
     switch (level){
       case 1 : {
@@ -84,8 +84,6 @@ function Words(){
     }
     // this.setState({ words });
     // this.setState({index:0});
-
-   
   };
 
   const checkWord = (e) => {

@@ -1,7 +1,7 @@
-import React from 'react'
+import React from "react";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import { useState, useEffect } from "react";
-import { TIME_FOR_LEVELS } from './Constants';
+import { TIME_FOR_LEVELS } from "./Constants";
 
 const Timer = (props) => {
   // initialize timeLeft with the seconds prop
@@ -23,13 +23,18 @@ const Timer = (props) => {
     return () => clearInterval(intervalId);
     // add timeLeft as a dependency to re-rerun the effect
     // when we update it
-  },[timeLeft]);
-
+  }, [timeLeft]);
 
   return (
     <div>
-      <ProgressBar now={(TIME_FOR_LEVELS[props.level-2]-timeLeft)/TIME_FOR_LEVELS[props.level-2]*100}></ProgressBar>
-      <h1 style={{ textAlign:"center"}}>{timeLeft}</h1>
+      <ProgressBar
+        now={
+          ((TIME_FOR_LEVELS[props.level - 2] - timeLeft) /
+            TIME_FOR_LEVELS[props.level - 2]) *
+          100
+        }
+      ></ProgressBar>
+      <h1 style={{ textAlign: "center" }}>{timeLeft}</h1>
       {/* <h1 style={{ textAlign:"center"}}>{TIME_FOR_LEVELS[props.level-1]}</h1> */}
     </div>
   );
