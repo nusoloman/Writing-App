@@ -6,7 +6,7 @@ import { TIME_FOR_LEVELS } from './Constants';
 const Timer = (props) => {
   // initialize timeLeft with the seconds prop
   const [timeLeft, setTimeLeft] = useState(0);
-  if (timeLeft === 0) {
+  if (timeLeft === 0 | !props.timer) {
   setTimeLeft(props.seconds);
   }
   useEffect(() => {
