@@ -1,8 +1,8 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import randomWords from "random-words";
 import Popup from "./Popup";
 import "./index.css";
-import { Button, Card, Input, Table } from "reactstrap";
+import { Button, Input } from "reactstrap";
 import Timer from './Timer';
 import { LEVEL_1_TIME, LEVEL_2_TIME, LEVEL_3_TIME, LEVEL_4_TIME, LEVEL_5_TIME } from "./Constants";
 
@@ -44,7 +44,7 @@ function Words(){
       case 2: {
         let words = randomWords(20);
         setSeconds(LEVEL_2_TIME);
-        setOpenPopup(true);
+        setOpenPopup(false);
         setWords(words);
         setIndex(0);
       }
@@ -52,7 +52,7 @@ function Words(){
       case 3: {
         let words = randomWords(25);
         setSeconds(LEVEL_3_TIME);
-        setOpenPopup(true);
+        setOpenPopup(false);
         setWords(words);
         setIndex(0);
 
@@ -61,7 +61,7 @@ function Words(){
       case 4: {
         let words = randomWords(30);
         setSeconds(LEVEL_4_TIME);
-        setOpenPopup(true);
+        setOpenPopup(false);
         setWords(words);
         setIndex(0);
         
@@ -70,7 +70,7 @@ function Words(){
       case 5: {
         let words = randomWords(40);
         setSeconds(LEVEL_5_TIME);
-        setOpenPopup(true);
+        setOpenPopup(false);
         setWords(words);
         setIndex(0);
         
@@ -93,18 +93,28 @@ function Words(){
     let { value } = e.target;
     setInputValue(value);
     value = value.toLowerCase().split(" ");
-
-    if (value.length === 2) {
-      if (words[index] === value[0]) {
-        setIndex(index+1);
-        document.getElementById(index).style.backgroundColor ="green";
-        setInputValue("");
-      } else {
-        setIndex(index+1);
-        document.getElementById(index).style.backgroundColor ="red";
-        setInputValue("");
+      if (value.length === 2) {
+        if (words[index] === value[0]) {
+          setIndex(index+1);
+          document.getElementById(index).style.backgroundColor ="green";
+          setInputValue("");
+          if (words.length === index+1){
+            setOpenPopup(true);
+            setTimer(false);
+          }
+        } else {
+          setIndex(index+1);
+          document.getElementById(index).style.backgroundColor ="red";
+          setInputValue("");
+          if (words.length === index+1){
+            setOpenPopup(true);
+            setTimer(false);
+          }
+        }
       }
-    }
+
+
+    
   };
 
     return (
@@ -141,10 +151,10 @@ function Words(){
           onChange={(e) => checkWord(e)}
         ></Input>
 
-       <Popup openPopup={openPopup} setOpenPopup={setOpenPopup}>
+       <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} getWords={getWords}>
           <h1>This popup has triggered.</h1></Popup>
 
-        <Button onClick={getWords}> Get</Button>
+        {level>1?"":(<Button onClick={getWords}> Get</Button>)}
 
 
         

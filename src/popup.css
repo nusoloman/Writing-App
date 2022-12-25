@@ -17,6 +17,7 @@
     padding: 20px;
     border-radius: 5px;
     text-align: center;
+    padding-right: 140px;
 }
 
 .popup-inner .close-btn {
@@ -24,5 +25,17 @@
     top: 10px;
     right: 10px;
     font-size: 20px;
+    width: 110px;
     cursor: pointer;
+    background-color: red;
+}
+
+.popup-inner .ok-btn {
+    position: absolute;
+    bottom:10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    width: 110px;
+    background-color: green;
 }
