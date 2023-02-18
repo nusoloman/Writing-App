@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import randomWords from "random-words";
 import Popup from "./Popup";
 import "./index.css";
-import { Button, Input } from "reactstrap";
+import { Button, Container, Input } from "reactstrap";
 import Timer from './Timer';
 import { LEVEL_1_TIME, LEVEL_2_TIME, LEVEL_3_TIME, LEVEL_4_TIME, LEVEL_5_TIME } from "./Constants";
 
@@ -29,7 +29,7 @@ function Words(){
     setLevel(level+1);
     const allWords = document.querySelectorAll('.word');
     allWords.forEach(word => {
-      word.style.backgroundColor = 'white';
+      word.style.backgroundColor = '#f5f5f5';
     });
 
     // const words = randomWords(10);
@@ -111,17 +111,16 @@ function Words(){
         }
       }
 
-
-    
   };
 
     return (
-      <div className="main" style={{ textAlign: "center" }}>
-
+      <div className="main">
+        <Container>
+          
         {timer &&(
-      <Timer handleTimer={handleTimer} timer={timer} seconds={seconds} level={level}></Timer> )}
+      <Timer handleTimer={handleTimer} timer={timer} seconds={seconds} level={level} style={{position:"relative" , top:"9em"}}/> )}
         
-        <div style={{ direction: "ltr" }}>
+        <div style={{ direction: "ltr" , position:"absolute", top:"5em", width:"80em",paddingTop: "35px", textAlign:"center" }}>
           {words.map((word, index) => (
             <span key={index}>
               <h3
@@ -131,6 +130,7 @@ function Words(){
                   display: "inline-block",
                   backgroundColor: backgroundColor,
                   margin: "5px",
+                  borderRadius: "5px",
                 }}
               >
                 {word}
@@ -147,15 +147,17 @@ function Words(){
           onBlur={()=>setMyPlaceHolder("Başlamak için butona tıklayınız")}
           value={inputValue}
           onChange={(e) => checkWord(e)}
-        ></Input>
+          style={{position:"absolute", top:"40%" , maxWidth:"80em"}}
+        />
 
-       <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} getWords={getWords}>
+       <Popup openPopup={openPopup} setOpenPopup={setOpenPopup} getWords={getWords} >
           <h1>This popup has triggered.</h1></Popup>
 
-        {level>1?"":(<Button onClick={getWords}> Get</Button>)}
+      
+      <Button style={{position:"absolute", top:"50%", width:80, left:"47%"}} onClick={getWords}> Get</Button>
 
 
-        
+        </Container>
       </div>
     );
   }
