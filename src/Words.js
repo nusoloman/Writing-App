@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import randomWords from "random-words";
 import Popup from "./Popup";
 import "./index.css";
@@ -28,9 +28,9 @@ function Words() {
   const [trueValue, setTrueValue] = useState(0);
   const [falseValue, setFalseValue] = useState(0);
   const [initialValue, setInitialValue] = useState(0);
+  const [endOfGame, setEndOfGame] = useState(false);
 
   const getWords = () => {
-    document.getElementById("input").focus();
     setTimerState(true);
     const allWords = document.querySelectorAll(".word");
     allWords.forEach((word) => {
@@ -109,6 +109,9 @@ function Words() {
         setInitialValue(initialValue - 1);
         setInputValue("");
         if (words.length === index + 1) {
+          if(level === 4){
+            setEndOfGame(true);
+          }
           setOpenPopup(true);
           setTimerState(false);
         }
@@ -119,12 +122,27 @@ function Words() {
         setInitialValue(initialValue - 1);
         setInputValue("");
         if (words.length === index + 1) {
+          if(level === 4){
+            setEndOfGame(true);
+          }
           setOpenPopup(true);
           setTimerState(false);
         }
       }
     }
   };
+
+  useEffect(() => {
+    if (!openPopup) document.getElementById("input").focus();
+    
+  }, [openPopup]);
+
+  useEffect(() => {
+    console.log("level", level);
+    if (level !== 5) {
+      getWords();
+    }
+  }, [level]);
 
   return (
     <div className="main">
@@ -171,7 +189,6 @@ function Words() {
           type="text"
           onFocus={() => {
             setMyPlaceHolder("");
-            console.log("focus");
           }}
           onBlur={() => setMyPlaceHolder("Başlamak için butona tıklayınız")}
           value={inputValue}
@@ -193,14 +210,10 @@ function Words() {
           level={level}
           setLevel={setLevel}
           leftTimeForPopup={leftTimeForPopup}
+          endOfGame={endOfGame}
+          setEndOfGame={setEndOfGame}
         ></Popup>
 
-        <Button
-          style={{ position: "absolute", top: "50%", width: 80, left: "47%" }}
-          onClick={getWords}
-        >
-          Get
-        </Button>
       </Container>
     </div>
   );
