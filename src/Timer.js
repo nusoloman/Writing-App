@@ -3,9 +3,16 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import { useState, useEffect, useRef } from "react";
 import { TIME_FOR_LEVELS } from "./Constants";
 
-function Timer({ level, timerState, setOpenPopup, setTimerState }) {
+function Timer({
+  level,
+  timerState,
+  setOpenPopup,
+  setTimerState,
+  setLeftTimeForPopup,
+}) {
   const counterCB = async (timeLeft) => {
     setTimeLeft(timeLeft);
+    setLeftTimeForPopup(timeLeft);
     if (timeLeft === 0) {
       clock.stop();
       setOpenPopup(true);

@@ -13,6 +13,7 @@ function Popup({
   setFalseValue,
   initialValue,
   setLevel,
+  leftTimeForPopup,
 }) {
   const handleClosePopup = () => {
     setFalseValue(0);
@@ -21,11 +22,20 @@ function Popup({
     setOpenPopup(false);
   };
   const handleOkPopup = () => {
+    if(leftTimeForPopup === 0)
+    {
+    setFalseValue(0);
+    setTrueValue(0);
+    setLevel(0);
+    setOpenPopup(false);
+    getWords();
+    }else {
     setFalseValue(0);
     setTrueValue(0);
     setLevel(level + 1);
     setOpenPopup(false);
     getWords();
+  }
   };
 
   return openPopup ? (
@@ -33,53 +43,62 @@ function Popup({
       <div className="popup-inner">
         {falseValue > 0 && trueValue > 0 && initialValue > 0 ? (
           <>
-            <h2>{`${trueValue} kelime doğru `}</h2>
-            <h2>{`${falseValue} kelime yanlış `}</h2>
-            <h2>{`${initialValue} kelime boş `}</h2>
+            <text>{`Zaman bitti`}</text> <br/>
+            <text>{`Doğru kelime: ${trueValue}`}</text> <br/>
+            <text>{`Yanlış kelime: ${falseValue}`}</text> <br/>
+            <text>{`Boş kelime: ${initialValue}`}</text> <br/>
           </>
         ) : falseValue > 0 && trueValue > 0 && initialValue === 0 ? (
           <>
-            <h2>{`${trueValue} kelime doğru `}</h2>
-            <h2>{`${falseValue} kelime yanlış `}</h2>
+            <text>{`Kalan zaman: ${leftTimeForPopup} saniye`}</text> <br/>
+            <text>{`Doğru kelime: ${trueValue}  `}</text> <br/>
+            <text>{`Yanlış kelime: ${falseValue}  `}</text> <br/>
           </>
         ) : falseValue > 0 && trueValue === 0 && initialValue > 0 ? (
           <>
-            <h2>{`Hiçbir doğru kelime yazmadınız`}</h2>
-            <h2>{`${falseValue} kelime yanlış `}</h2>
-            <h2>{`${initialValue} kelime boş `}</h2>
+            <text>{`Zaman bitti`}</text> <br/> 
+            <text>{`Hiçbir doğru kelime yazmadınız`}</text> <br/>
+            <text>{`Yanlış kelime: ${falseValue}  `}</text> <br/>
+            <text>{`Boş kelime: ${initialValue}  `}</text> <br/>
           </>
         ) : falseValue > 0 && trueValue === 0 && initialValue === 0 ? (
           <>
-            <h2>{`Tüm kelimeleri yanlış yazdınız`}</h2>
+            <text>{`Kalan zaman: ${leftTimeForPopup} saniye`}</text> <br/>
+            <text>{`Tüm kelimeleri yanlış yazdınız`}</text> <br/>
           </>
         ) : falseValue === 0 && trueValue > 0 && initialValue > 0 ? (
           <>
-            <h2>{`${trueValue} kelime doğru `}</h2>
-            <h2>{`${initialValue} kelime boş `}</h2>
+            <text>{`Zaman bitti`}</text> <br/>
+            <text>{`Doğru kelime: ${trueValue}  `}</text> <br/>
+            <text>{`Boş kelime: ${initialValue}  `}</text> <br/>
           </>
         ) : falseValue === 0 && trueValue > 0 && initialValue === 0 ? (
           <>
-            <h2>{`Tüm kelimeler doğru, Tebrikler! `}</h2>
+            <text>{`Kalan zaman: ${leftTimeForPopup} saniye`}</text> <br/>
+            <text>{`Tüm kelimeler doğru, Tebrikler! `}</text> <br/>
           </>
         ) : falseValue === 0 && trueValue === 0 && initialValue > 0 ? (
           <>
-            <h2>{`Tüm kelimeleri boş bıraktınız`}</h2>
+            <text>{`Zaman bitti`}</text> <br/>
+            <text>{`Tüm kelimeleri boş bıraktınız`}</text> <br/>
           </>
         ) : (
           ""
         )}
+        {leftTimeForPopup !== 0 ?(
         <Button className="close-btn" onClick={handleClosePopup}>
           Kapat
         </Button>
+        ):""}
         <Button className="ok-btn" onClick={handleOkPopup}>
-          Devam Et
+
+          {leftTimeForPopup === 0 ? "Tekrar dene" : "Devam Et"}
         </Button>
-        -
+        
       </div>
     </div>
   ) : (
     ""
   );
 }
-
 export default Popup;

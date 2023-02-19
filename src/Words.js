@@ -20,6 +20,7 @@ function Words() {
   const [myPlaceHolder, setMyPlaceHolder] = useState(
     "Başlamak için butona tıklayın"
   );
+  const [leftTimeForPopup, setLeftTimeForPopup] = useState(0);
   const [level, setLevel] = useState(0);
   const [timerState, setTimerState] = useState(false);
   const [seconds, setSeconds] = useState(0);
@@ -29,13 +30,13 @@ function Words() {
   const [initialValue, setInitialValue] = useState(0);
 
   const getWords = () => {
+    document.getElementById("input").focus();
     setTimerState(true);
     const allWords = document.querySelectorAll(".word");
     allWords.forEach((word) => {
       word.style.backgroundColor = "#f5f5f5";
     });
 
-    // const words = randomWords(10);
     switch (level) {
       case 1:
         {
@@ -93,8 +94,6 @@ function Words() {
         setIndex(0);
       }
     }
-    // this.setState({ words });
-    // this.setState({index:0});
   };
 
   const checkWord = (e) => {
@@ -135,6 +134,7 @@ function Words() {
           timerState={timerState}
           setOpenPopup={setOpenPopup}
           setTimerState={setTimerState}
+          setLeftTimeForPopup={setLeftTimeForPopup}
         />
 
         <div
@@ -169,7 +169,10 @@ function Words() {
           placeholder={myPlaceHolder}
           id="input"
           type="text"
-          onFocus={() => setMyPlaceHolder("")}
+          onFocus={() => {
+            setMyPlaceHolder("");
+            console.log("focus");
+          }}
           onBlur={() => setMyPlaceHolder("Başlamak için butona tıklayınız")}
           value={inputValue}
           onChange={(e) => checkWord(e)}
@@ -189,7 +192,8 @@ function Words() {
           setInitialValue={setInitialValue}
           level={level}
           setLevel={setLevel}
-        />
+          leftTimeForPopup={leftTimeForPopup}
+        ></Popup>
 
         <Button
           style={{ position: "absolute", top: "50%", width: 80, left: "47%" }}
