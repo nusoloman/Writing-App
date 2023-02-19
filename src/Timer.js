@@ -1,43 +1,81 @@
 import React from "react";
 import ProgressBar from "react-bootstrap/ProgressBar";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { TIME_FOR_LEVELS } from "./Constants";
 
-const Timer = (props) => {
-  // initialize timeLeft with the seconds prop
-  const [timeLeft, setTimeLeft] = useState(0);
-  if (timeLeft === 0 | !props.timer) {
-  setTimeLeft(props.seconds);
-  }
+function Timer({ level, timerState, setOpenPopup, setTimerState }) {
+  const counterCB = async (timeLeft) => {
+    setTimeLeft(timeLeft);
+    if (timeLeft === 0) {
+      clock.stop();
+      setOpenPopup(true);
+      setTimerState(false);
+    }
+  };
+  const [timeLeft, setTimeLeft] = useState(TIME_FOR_LEVELS[level]);
+  const clock = useRef(new Stopwatch(counterCB)).current;
+
   useEffect(() => {
-    // exit early when we reach 0
-    if (!timeLeft) return;
+    setTimeLeft(TIME_FOR_LEVELS[level]);
+  }, [level]);
 
-    // save intervalId to clear the interval when the
-    // component re-renders
-    const intervalId = setInterval(() => {
-      setTimeLeft(timeLeft - 1);
-    }, 1000);
-
-    // clear interval on re-render to avoid memory leaks
-    return () => clearInterval(intervalId);
-    // add timeLeft as a dependency to re-rerun the effect
-    // when we update it
-  }, [timeLeft]);
+  useEffect(() => {
+    if (timerState) {
+      clock.start(counterCB, level);
+    } else {
+      clock.stop();
+    }
+  }, [timerState]);
 
   return (
     <div>
       <ProgressBar
         now={
-          ((TIME_FOR_LEVELS[props.level - 2] - timeLeft) /
-            TIME_FOR_LEVELS[props.level - 2]) *
-          100
+          ((TIME_FOR_LEVELS[level] - timeLeft) / TIME_FOR_LEVELS[level]) * 100
         }
       ></ProgressBar>
-      <h1 style={{ textAlign: "center" }}>{timeLeft}</h1>
+      <h1 style={{ textAlign: "center" }}>{timeLeft} </h1>
       {/* <h1 style={{ textAlign:"center"}}>{TIME_FOR_LEVELS[props.level-1]}</h1> */}
     </div>
   );
-};
+}
+
+class Stopwatch {
+  constructor(handler) {
+    this.interval = 0;
+    this.resetHandler = handler ?? (() => {});
+    this.isCounting = false;
+  }
+
+  *makeCounter(number) {
+    var c = number;
+    while (this.isCounting) {
+      yield c--;
+      if (c < 1) {
+        clearInterval(this.interval);
+        this.resetHandler();
+      }
+    }
+  }
+
+  start(handler, level) {
+    this.isCounting = true;
+    const counter = this.makeCounter(TIME_FOR_LEVELS[level]);
+    this.interval = setInterval(() => {
+      const { value } = counter.next();
+      handler(value ?? 0);
+    }, 1000);
+  }
+
+  reset() {
+    clearInterval(this.interval);
+    this.resetHandler();
+    this.isCounting = false;
+  }
+  stop() {
+    this.isCounting = false;
+    clearInterval(this.interval);
+  }
+}
 
 export default Timer;
