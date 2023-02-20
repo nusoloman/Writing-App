@@ -194,6 +194,7 @@ function Words() {
           value={inputValue}
           onChange={(e) => checkWord(e)}
           style={{ position: "absolute", top: "40%", maxWidth: "80em" }}
+
         />
 
         <Popup
@@ -212,7 +213,8 @@ function Words() {
           leftTimeForPopup={leftTimeForPopup}
           endOfGame={endOfGame}
           setEndOfGame={setEndOfGame}
-        ></Popup>
+          setInputValue={setInputValue}
+        />
 
       </Container>
     </div>

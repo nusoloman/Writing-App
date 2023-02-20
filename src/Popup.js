@@ -1,4 +1,5 @@
 import React, { useEffect,useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Button } from "reactstrap";
 import "./popup.css";
 
@@ -16,8 +17,10 @@ function Popup({
   leftTimeForPopup,
   endOfGame,
   setEndOfGame,
+  setInputValue,
 }) {
   const [point, setPoint] = useState(0);
+  const navigate = useNavigate()
 
   const handleOkPopup = () => {
     if(endOfGame){
@@ -27,12 +30,15 @@ function Popup({
       setLevel(0),
       setOpenPopup(false),
       setEndOfGame(false),
-      setPoint(0)
+      setPoint(0),
+      setInputValue(""),
+      navigate("/")
       )
       
     }
     if(leftTimeForPopup === 0)
     {
+    setInputValue("")
     setFalseValue(0);
     setTrueValue(0);
     setLevel(0);
@@ -40,6 +46,7 @@ function Popup({
     setPoint(0);
     getWords();
     }else {
+    setInputValue("")
     setFalseValue(0);
     setTrueValue(0);
     setLevel(level + 1);
@@ -78,7 +85,7 @@ function Popup({
           </>
         ) : falseValue > 0 && trueValue > 0 && initialValue > 0 ? (
           <>
-            <text style={styles.time}>{`Zaman bitti`}</text> <br/>
+            <h2>{`Zaman bitti`}</h2> <br/>
             <text style={styles.true}>{`Doğru kelime: ${trueValue}`}</text> <br/>
             <text style={styles.false}>{`Yanlış kelime: ${falseValue}`}</text> <br/>
             <text style={styles.initial}>{`Boş kelime: ${initialValue}`}</text> <br/>
@@ -86,42 +93,45 @@ function Popup({
           </>
         ) : falseValue > 0 && trueValue > 0 && initialValue === 0 ? (
           <>
+            <h2>{`SEVİYE ${level+1} TAMAMLANDI!`}</h2>
             <text style={styles.time}>{`Ekstra zaman: ${leftTimeForPopup} saniye`}</text> <br/>
             <text style={styles.true}>{`Doğru kelime: ${trueValue}  `}</text> <br/>
             <text style={styles.false}>{`Yanlış kelime: ${falseValue}  `}</text> <br/>
-            <h2>{`PUAN: ${point}`}</h2> <br/>
+            <h2 style={{marginTop:"15px"}}>{`PUAN: ${point}`}</h2> <br/>
           </>
         ) : falseValue > 0 && trueValue === 0 && initialValue > 0 ? (
           <>
-            <text style={styles.time}>{`Zaman bitti`}</text> <br/> 
+            <h2>{`Zaman bitti`}</h2> <br/> 
             <text style={styles.false}>{`Yanlış kelime: ${falseValue}  `}</text> <br/>
             <text style={styles.initial}>{`Boş kelime: ${initialValue}  `}</text> <br/>
             <h2>{`PUAN: ${point}`}</h2> <br/>
           </>
         ) : falseValue > 0 && trueValue === 0 && initialValue === 0 ? (
-          <>
+          <> 
+            <h2>{`SEVİYE ${level+1} TAMAMLANDI!`}</h2>
             <text style={styles.time}>{`Ekstra zaman: ${leftTimeForPopup} saniye`}</text> <br/>
             <text style={styles.false}>{`Tüm kelimeleri yanlış yazdınız`}</text> <br/>
             <h2>{`PUAN: ${point}`}</h2> <br/>
           </>
         ) : falseValue === 0 && trueValue > 0 && initialValue > 0 ? (
           <>
-            <text style={styles.time}>{`Zaman bitti`}</text> <br/>
+            <h2>{`Zaman bitti`}</h2> <br/>
             <text style={styles.true}>{`Doğru kelime: ${trueValue}  `}</text> <br/>
             <text style={styles.initial}>{`Boş kelime: ${initialValue}  `}</text> <br/>
             <h2>{`PUAN: ${point}`}</h2> <br/>
           </>
         ) : falseValue === 0 && trueValue > 0 && initialValue === 0 ? (
           <>
+            <h2>{`SEVİYE ${level+1} TAMAMLANDI!`}</h2>
             <text style={styles.time}>{`Ekstra zaman: ${leftTimeForPopup} saniye`}</text> <br/>
             <text style={styles.true}>{`Tüm kelimeler doğru, Tebrikler! `}</text> <br/>
             <h2>{`PUAN: ${point}`}</h2> <br/>
           </>
         ) : falseValue === 0 && trueValue === 0 && initialValue > 0 ? (
           <>
-            <text style={styles.time}>{`Zaman bitti`}</text> <br/>
+            <h2>{`Zaman bitti`}</h2> <br/>
             <text style={styles.initial}>{`Tüm kelimeleri boş bıraktınız`}</text> <br/>
-            <h2>{`PUAN: ${point}`}</h2> <br/>
+            <h2 style={{marginTop:"50px"}}>{`PUAN: ${point}`}</h2> <br/>
           </>
         ) : (
           ""
@@ -131,6 +141,11 @@ function Popup({
 
           {leftTimeForPopup === 0 ? "Tekrar dene" : "Devam Et"}
         </Button>
+        {endOfGame&&(
+        <Button className="ok-btn" id="ok" onClick={handleOkPopup}>
+          Ana Sayfa
+        </Button>
+        )}
         
       </div>
     </div>
